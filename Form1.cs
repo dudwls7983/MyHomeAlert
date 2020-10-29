@@ -25,13 +25,13 @@ namespace MyHomeAlert
         {
             public int id;
             public string title;
-            public bool isQuiz;
+            public bool showContent;
 
-            public BoardData(int _id, string _title, bool _isQuiz)
+            public BoardData(int _id, string _title, bool _showContent)
             {
                 id = _id;
                 title = _title;
-                isQuiz = _isQuiz;
+                showContent = _showContent;
             }
 
             public int CompareTo(BoardData compareData)
@@ -72,11 +72,11 @@ namespace MyHomeAlert
                 html = client.DownloadString("https://cafe.naver.com/ArticleList.nhn?search.clubid=28622252&search.menuid=43&userDisplay=50");
                 GetPostFromHTML(html, init);
 
-                if(shareAllow.Checked)
+                if(shareAllow.Checked || quizAllow.Checked)
                 {
                     // clubid 28622252(놀러와 마이홈 공식카페) (전체글보기)
                     html = client.DownloadString("https://cafe.naver.com/ArticleList.nhn?search.clubid=28622252&userDisplay=50");
-                    GetPostFromHTML(html, init, true);
+                    GetPostFromHTML(html, init);
                 }
                 
                 boardDataList.Sort();
@@ -92,7 +92,7 @@ namespace MyHomeAlert
             }
         }
 
-        private void GetPostFromHTML(string html, bool init, bool share = false)
+        private void GetPostFromHTML(string html, bool init)
         {
             int index = 0;
 
@@ -121,6 +121,10 @@ namespace MyHomeAlert
                         continue;
                 }
 
+                // 같은 보드 데이터는 다시 담을 필요가 없다.
+                if (boardDataList.Exists(x => x.id == index))
+                    continue;
+
                 bool isNewPost = false;
                 if (index > lastIndex)
                 {
@@ -132,53 +136,55 @@ namespace MyHomeAlert
                 var date = Trim(board.Descendants().Where(n => n.HasClass("td_date")).First().InnerText);
                 var title = Trim(board.Descendants().Where(n => n.HasClass("article")).First().InnerText);
 
-                bool typeCheck = false;
-                bool isQuiz = false;
-                if(share == true)
+                int typeCheck = 0;
+
+                // 퀴즈와 나눔이 같이 들어갈 경우 나눔의 우선순위가 더 높다.
+                if (quizAllow.Checked && title.Contains("퀴즈")) typeCheck = 3;
+                if (shareAllow.Checked && title.Contains("나눔")) typeCheck = 2;
+
+                if(typeCheck == 0)
                 {
-                    typeCheck = title.Contains("나눔");
-                    isQuiz = title.Contains("퀴즈");
-                }
-                else // 나눔글 체크가 아닌 경우
-                {
+                    string checkTitle = title;
                     var head = board.Descendants().Where(n => n.HasClass("head"));
                     // 머리말이 있으면 머리말을 체크한다.
                     if (head.Any())
                     {
                         var type = Trim(head.First().InnerText);
                         title = title.Replace(type, ""); // 제목에는 머리말을 제거해준다.
-
-                        // 팔아요 체크일 때에는 팔/팝 들어가는지 체크, 아닐 때는 팔/팝 안 들어가는지 체크
-                        typeCheck = (sellCheck.Checked == (type.Contains("팔") || type.Contains("팝")));
+                        checkTitle = type;
                     }
-                    else
-                        typeCheck = (sellCheck.Checked == (title.Contains("팔") || title.Contains("팝")));
+                    // 팔아요 체크일 때에는 팔/팝 들어가는지 체크
+                    if (sellCheck.Checked == true && (checkTitle.Contains("팔") || checkTitle.Contains("팝")) ||
+                        buyCheck.Checked == true && (checkTitle.Contains("사") || checkTitle.Contains("삽")))
+                        typeCheck = 1;
                 }
                 
 
-                if (typeCheck)
+                if (typeCheck > 0)
                 {
-                    if(share == true) // 나눔글인 경우
+                    bool alert = false;
+                    bool join = false;
+                    switch (typeCheck)
                     {
-                        // 새글 키워드 알림
-                        if (isNewPost && shareAlert.Checked && !init && Trim(keywordBox.Text) != string.Empty)
-                        {
-                            if (System.IO.File.Exists(alertSound.URL))
-                            {
-                                alertSound.controls.stop();
-                                alertSound.controls.currentPosition = 0;
-                                alertSound.controls.play();
-                            }
-                            else
-                            {
-                                System.Media.SystemSounds.Beep.Play();
-                            }
-                        }
+                        case 1:
+                            alert = alertCheck.Checked;
+                            join = autoJoin.Checked;
+                            break;
+                        case 2:
+                            alert = shareAlert.Checked;
+                            join = shareJoin.Checked;
+                            break;
+                        case 3:
+                            alert = quizAlert.Checked;
+                            join = quizJoin.Checked;
+                            break;
                     }
-                    else if (Trim(keywordBox.Text) != string.Empty)
+
+                    // 키워드 체크
+                    if (typeCheck == 1 && Trim(keywordBox.Text) != string.Empty)
                     {
-                        string[] words = keywordBox.Text.Split(new char[] { ',', '+', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                         bool success = false;
+                        string[] words = keywordBox.Text.Split(new char[] { ',', '+', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                         foreach (var word in words)
                         {
                             if (title.Contains(word))
@@ -191,9 +197,12 @@ namespace MyHomeAlert
                         {
                             continue;
                         }
+                    }
 
-                        // 새글 키워드 알림
-                        if (isNewPost && alertCheck.Checked && !init && Trim(keywordBox.Text) != string.Empty)
+                    // init이 아니고 새글이면
+                    if(isNewPost && !init)
+                    {
+                        if(alert) // 알람 체크
                         {
                             if (System.IO.File.Exists(alertSound.URL))
                             {
@@ -205,22 +214,22 @@ namespace MyHomeAlert
                             {
                                 System.Media.SystemSounds.Beep.Play();
                             }
+                        }
 
-                            if (autoJoin.Checked)
-                            {
-                                string url = "https://m.cafe.naver.com/ca-fe/web/cafes/28622252/articles/" + index;
-                                browser.Load(url);
-                            }
+                        if(join) // 자동입장 체크
+                        {
+                            string url = "https://m.cafe.naver.com/ca-fe/web/cafes/28622252/articles/" + index;
+                            browser.Load(url);
                         }
                     }
 
+                    // 댓글 체크
                     var reply = board.Descendants().Where(n => n.HasClass("cmt"));
                     string cmt = reply.Any() ? Trim(reply.First().InnerText) : "    ";
                     title = cmt + " " + title + " / " + name + "(" + date + ")";
 
-                    boardDataList.Add(new BoardData(index, title));
+                    boardDataList.Add(new BoardData(index, title, (typeCheck > 1)));
                 }
-                //richTextBox1.Text += Environment.NewLine + System.Text.RegularExpressions.Regex.Replace(board.InnerText, @"\s", "");
             }
         }
 
@@ -229,6 +238,7 @@ namespace MyHomeAlert
             refreshCheck.Checked = !refreshCheck.Checked;
         }
 
+        // 글자없는 공백/개행 모두 제거
         private string Trim(string text)
         {
             string retn = System.Text.RegularExpressions.Regex.Replace(text, @"(\s)\s+", "$1");
@@ -249,6 +259,10 @@ namespace MyHomeAlert
             notepad.Text = Properties.Settings.Default.notepad;
             shareAlert.Checked = Properties.Settings.Default.shareAlert;
             shareAllow.Checked = Properties.Settings.Default.shareAllow;
+            shareJoin.Checked = Properties.Settings.Default.shareJoin;
+            quizAllow.Checked = Properties.Settings.Default.quizAllow;
+            quizAlert.Checked = Properties.Settings.Default.quizAlert;
+            quizJoin.Checked = Properties.Settings.Default.quizJoin;
 
             intervalTime.Text = intervalSlider.Value.ToString();
             refreshTimer.Interval = intervalSlider.Value * 1000;
@@ -282,12 +296,6 @@ namespace MyHomeAlert
         private void button5_Click(object sender, EventArgs e)
         {
             RefreshBoard();
-        }
-        
-        private void intervalApplyButton_Click(object sender, EventArgs e)
-        {
-            refreshTimer.Interval = intervalSlider.Value * 1000;
-            refreshTimer.Enabled = refreshCheck.Checked;
         }
 
         private void intervalSlider_Scroll(object sender, EventArgs e)
@@ -348,6 +356,9 @@ namespace MyHomeAlert
 
         private void refreshCheck_CheckedChanged(object sender, EventArgs e)
         {
+            refreshTimer.Interval = intervalSlider.Value * 1000;
+            refreshTimer.Enabled = refreshCheck.Checked;
+
             Properties.Settings.Default.autoRefresh = refreshCheck.Checked;
             Properties.Settings.Default.Save();
         }
@@ -379,6 +390,30 @@ namespace MyHomeAlert
         private void shareJoin_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.shareAllow = shareAllow.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void shareJoin_CheckedChanged_1(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.shareJoin = shareJoin.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void quizAllow_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.quizAllow = quizAllow.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void quizAlert_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.quizAlert = quizAlert.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void quizJoin_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.quizJoin = quizJoin.Checked;
             Properties.Settings.Default.Save();
         }
 

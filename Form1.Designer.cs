@@ -37,7 +37,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.refreshCheck = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
-            this.intervalApplyButton = new System.Windows.Forms.Button();
             this.postList = new System.Windows.Forms.ListBox();
             this.button5 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -52,17 +51,27 @@
             this.notepad = new System.Windows.Forms.RichTextBox();
             this.shareAlert = new System.Windows.Forms.CheckBox();
             this.shareAllow = new System.Windows.Forms.CheckBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.quizAllow = new System.Windows.Forms.CheckBox();
+            this.quizAlert = new System.Windows.Forms.CheckBox();
+            this.shareJoin = new System.Windows.Forms.CheckBox();
+            this.quizJoin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.intervalSlider)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // loginButton
             // 
-            this.loginButton.Location = new System.Drawing.Point(711, 17);
+            this.loginButton.Location = new System.Drawing.Point(6, 6);
             this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(77, 21);
+            this.loginButton.Size = new System.Drawing.Size(102, 21);
             this.loginButton.TabIndex = 4;
-            this.loginButton.Text = "로그인 체크";
+            this.loginButton.Text = "로그인 체크하기";
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
@@ -110,7 +119,7 @@
             // 
             this.refreshCheck.AutoCheck = false;
             this.refreshCheck.AutoSize = true;
-            this.refreshCheck.Location = new System.Drawing.Point(12, 45);
+            this.refreshCheck.Location = new System.Drawing.Point(6, 109);
             this.refreshCheck.Name = "refreshCheck";
             this.refreshCheck.Size = new System.Drawing.Size(71, 16);
             this.refreshCheck.TabIndex = 17;
@@ -122,32 +131,21 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(332, 47);
+            this.label5.Location = new System.Drawing.Point(105, 111);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 12);
             this.label5.TabIndex = 19;
             this.label5.Text = "초";
-            // 
-            // intervalApplyButton
-            // 
-            this.intervalApplyButton.Location = new System.Drawing.Point(355, 43);
-            this.intervalApplyButton.Name = "intervalApplyButton";
-            this.intervalApplyButton.Size = new System.Drawing.Size(48, 21);
-            this.intervalApplyButton.TabIndex = 20;
-            this.intervalApplyButton.TabStop = false;
-            this.intervalApplyButton.Text = "적용";
-            this.intervalApplyButton.UseVisualStyleBackColor = true;
-            this.intervalApplyButton.Click += new System.EventHandler(this.intervalApplyButton_Click);
             // 
             // postList
             // 
             this.postList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.postList.Font = new System.Drawing.Font("맑은 고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.postList.FormattingEnabled = true;
-            this.postList.ItemHeight = 20;
-            this.postList.Location = new System.Drawing.Point(12, 72);
+            this.postList.ItemHeight = 23;
+            this.postList.Location = new System.Drawing.Point(12, 42);
             this.postList.Name = "postList";
-            this.postList.Size = new System.Drawing.Size(391, 364);
+            this.postList.Size = new System.Drawing.Size(391, 395);
             this.postList.TabIndex = 21;
             this.postList.TabStop = false;
             this.postList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.postList_DrawItem);
@@ -178,11 +176,11 @@
             // intervalSlider
             // 
             this.intervalSlider.AutoSize = false;
-            this.intervalSlider.Location = new System.Drawing.Point(89, 43);
+            this.intervalSlider.Location = new System.Drawing.Point(6, 131);
             this.intervalSlider.Maximum = 30;
             this.intervalSlider.Minimum = 3;
             this.intervalSlider.Name = "intervalSlider";
-            this.intervalSlider.Size = new System.Drawing.Size(206, 17);
+            this.intervalSlider.Size = new System.Drawing.Size(360, 33);
             this.intervalSlider.TabIndex = 24;
             this.intervalSlider.TabStop = false;
             this.intervalSlider.Value = 5;
@@ -190,9 +188,9 @@
             // 
             // intervalTime
             // 
-            this.intervalTime.Location = new System.Drawing.Point(301, 47);
+            this.intervalTime.Location = new System.Drawing.Point(83, 109);
             this.intervalTime.Name = "intervalTime";
-            this.intervalTime.Size = new System.Drawing.Size(34, 12);
+            this.intervalTime.Size = new System.Drawing.Size(23, 16);
             this.intervalTime.TabIndex = 25;
             this.intervalTime.Text = "5";
             this.intervalTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -205,7 +203,7 @@
             // topMostCheck
             // 
             this.topMostCheck.AutoSize = true;
-            this.topMostCheck.Location = new System.Drawing.Point(411, 48);
+            this.topMostCheck.Location = new System.Drawing.Point(6, 6);
             this.topMostCheck.Name = "topMostCheck";
             this.topMostCheck.Size = new System.Drawing.Size(72, 16);
             this.topMostCheck.TabIndex = 26;
@@ -216,7 +214,7 @@
             // alertCheck
             // 
             this.alertCheck.AutoSize = true;
-            this.alertCheck.Location = new System.Drawing.Point(411, 20);
+            this.alertCheck.Location = new System.Drawing.Point(128, 6);
             this.alertCheck.Name = "alertCheck";
             this.alertCheck.Size = new System.Drawing.Size(116, 16);
             this.alertCheck.TabIndex = 27;
@@ -226,14 +224,14 @@
             // 
             // browserPanel
             // 
-            this.browserPanel.Location = new System.Drawing.Point(409, 70);
+            this.browserPanel.Location = new System.Drawing.Point(6, 33);
             this.browserPanel.Name = "browserPanel";
-            this.browserPanel.Size = new System.Drawing.Size(379, 368);
+            this.browserPanel.Size = new System.Drawing.Size(360, 358);
             this.browserPanel.TabIndex = 30;
             // 
             // clearCookieButton
             // 
-            this.clearCookieButton.Location = new System.Drawing.Point(722, 43);
+            this.clearCookieButton.Location = new System.Drawing.Point(114, 6);
             this.clearCookieButton.Name = "clearCookieButton";
             this.clearCookieButton.Size = new System.Drawing.Size(66, 21);
             this.clearCookieButton.TabIndex = 31;
@@ -244,7 +242,7 @@
             // autoJoin
             // 
             this.autoJoin.AutoSize = true;
-            this.autoJoin.Location = new System.Drawing.Point(533, 20);
+            this.autoJoin.Location = new System.Drawing.Point(250, 6);
             this.autoJoin.Name = "autoJoin";
             this.autoJoin.Size = new System.Drawing.Size(116, 16);
             this.autoJoin.TabIndex = 32;
@@ -265,7 +263,7 @@
             // shareAlert
             // 
             this.shareAlert.AutoSize = true;
-            this.shareAlert.Location = new System.Drawing.Point(583, 46);
+            this.shareAlert.Location = new System.Drawing.Point(128, 28);
             this.shareAlert.Name = "shareAlert";
             this.shareAlert.Size = new System.Drawing.Size(116, 16);
             this.shareAlert.TabIndex = 34;
@@ -276,7 +274,7 @@
             // shareAllow
             // 
             this.shareAllow.AutoSize = true;
-            this.shareAllow.Location = new System.Drawing.Point(489, 46);
+            this.shareAllow.Location = new System.Drawing.Point(6, 28);
             this.shareAllow.Name = "shareAllow";
             this.shareAllow.Size = new System.Drawing.Size(88, 16);
             this.shareAllow.TabIndex = 35;
@@ -284,29 +282,107 @@
             this.shareAllow.UseVisualStyleBackColor = true;
             this.shareAllow.CheckedChanged += new System.EventHandler(this.shareJoin_CheckedChanged);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(409, 15);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(380, 423);
+            this.tabControl1.TabIndex = 36;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.loginButton);
+            this.tabPage1.Controls.Add(this.clearCookieButton);
+            this.tabPage1.Controls.Add(this.browserPanel);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(372, 397);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "브라우저";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.quizJoin);
+            this.tabPage2.Controls.Add(this.shareJoin);
+            this.tabPage2.Controls.Add(this.intervalTime);
+            this.tabPage2.Controls.Add(this.quizAlert);
+            this.tabPage2.Controls.Add(this.intervalSlider);
+            this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.quizAllow);
+            this.tabPage2.Controls.Add(this.shareAlert);
+            this.tabPage2.Controls.Add(this.shareAllow);
+            this.tabPage2.Controls.Add(this.autoJoin);
+            this.tabPage2.Controls.Add(this.alertCheck);
+            this.tabPage2.Controls.Add(this.refreshCheck);
+            this.tabPage2.Controls.Add(this.topMostCheck);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(372, 397);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "설정";
+            // 
+            // quizAllow
+            // 
+            this.quizAllow.AutoSize = true;
+            this.quizAllow.Location = new System.Drawing.Point(6, 50);
+            this.quizAllow.Name = "quizAllow";
+            this.quizAllow.Size = new System.Drawing.Size(88, 16);
+            this.quizAllow.TabIndex = 36;
+            this.quizAllow.Text = "퀴즈글 보기";
+            this.quizAllow.UseVisualStyleBackColor = true;
+            this.quizAllow.CheckedChanged += new System.EventHandler(this.quizAllow_CheckedChanged);
+            // 
+            // quizAlert
+            // 
+            this.quizAlert.AutoSize = true;
+            this.quizAlert.Location = new System.Drawing.Point(128, 50);
+            this.quizAlert.Name = "quizAlert";
+            this.quizAlert.Size = new System.Drawing.Size(116, 16);
+            this.quizAlert.TabIndex = 37;
+            this.quizAlert.Text = "퀴즈글 소리 알림";
+            this.quizAlert.UseVisualStyleBackColor = true;
+            this.quizAlert.CheckedChanged += new System.EventHandler(this.quizAlert_CheckedChanged);
+            // 
+            // shareJoin
+            // 
+            this.shareJoin.AutoSize = true;
+            this.shareJoin.Location = new System.Drawing.Point(250, 28);
+            this.shareJoin.Name = "shareJoin";
+            this.shareJoin.Size = new System.Drawing.Size(116, 16);
+            this.shareJoin.TabIndex = 38;
+            this.shareJoin.Text = "나눔글 자동 입장";
+            this.shareJoin.UseVisualStyleBackColor = true;
+            this.shareJoin.CheckedChanged += new System.EventHandler(this.shareJoin_CheckedChanged_1);
+            // 
+            // quizJoin
+            // 
+            this.quizJoin.AutoSize = true;
+            this.quizJoin.Location = new System.Drawing.Point(250, 50);
+            this.quizJoin.Name = "quizJoin";
+            this.quizJoin.Size = new System.Drawing.Size(116, 16);
+            this.quizJoin.TabIndex = 39;
+            this.quizJoin.Text = "퀴즈글 자동 입장";
+            this.quizJoin.UseVisualStyleBackColor = true;
+            this.quizJoin.CheckedChanged += new System.EventHandler(this.quizJoin_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.shareAllow);
-            this.Controls.Add(this.shareAlert);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.notepad);
-            this.Controls.Add(this.autoJoin);
-            this.Controls.Add(this.clearCookieButton);
-            this.Controls.Add(this.browserPanel);
-            this.Controls.Add(this.alertCheck);
-            this.Controls.Add(this.topMostCheck);
-            this.Controls.Add(this.intervalTime);
-            this.Controls.Add(this.intervalSlider);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.postList);
-            this.Controls.Add(this.intervalApplyButton);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.refreshCheck);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.keywordBox);
-            this.Controls.Add(this.loginButton);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -318,6 +394,10 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.intervalSlider)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,7 +410,6 @@
         private System.Windows.Forms.TextBox keywordBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button intervalApplyButton;
         private System.Windows.Forms.ListBox postList;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.RadioButton refreshCheck;
@@ -346,6 +425,13 @@
         private System.Windows.Forms.RichTextBox notepad;
         private System.Windows.Forms.CheckBox shareAlert;
         private System.Windows.Forms.CheckBox shareAllow;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.CheckBox quizAlert;
+        private System.Windows.Forms.CheckBox quizAllow;
+        private System.Windows.Forms.CheckBox quizJoin;
+        private System.Windows.Forms.CheckBox shareJoin;
     }
 }
 
